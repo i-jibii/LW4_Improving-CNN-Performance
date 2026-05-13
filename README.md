@@ -1,43 +1,40 @@
-# LW4: Improving CNN Performance — Moss Species Classifier
+# Laboratory Work 4 — Improving CNN Performance
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1NQ1T42jlJAiEBGNDrDvANJUJuhIkt6nY?usp=sharing)
 
-## 🌿 Project Overview
-This project focuses on the advanced evaluation and optimization of a **20-species Moss Image Classifier**. Moving beyond basic training, this phase implements **Explainable AI (Grad-CAM)** and **Model Regularization** (Batch Normalization, Dropout, and Data Augmentation) to build a robust, real-world identification system.
+**Status: SUCCESS (Final Accuracy: 88.40%)**
 
-## 📊 Performance Comparison Table
+## 📊 Three-Stage Performance Comparison
 
-| Metric | Baseline Model | Improved Model (Regularized) |
-| :--- | :--- | :--- |
-| **Validation Accuracy** | 74.00% | 35.82% |
-| **Precision (Weighted)** | 0.77 | 0.43 |
-| **Recall (Weighted)** | 0.74 | 0.36 |
-| **Overall AUC Score** | 0.938 | 0.778 |
-
-> **Note on Results**: While the raw accuracy of the Improved Model is lower, it exhibits **better generalization**. The Validation Accuracy is higher than the Training Accuracy, proving that the model is no longer overfitting and is learning complex, augmented features.
+| Metric | Baseline Model (LW3) | Improved Model (Custom) | **Advanced Model (EfficientNet)** |
+| :--- | :--- | :--- | :--- |
+| **Validation Accuracy** | 74.00% | 35.82% | **88.40%** |
+| **Training Accuracy** | ~80.00% | 25.54% | **96.37%** |
+| **Precision (Weighted)** | 0.77 | 0.43 | **0.90** |
+| **Recall (Weighted)** | 0.74 | 0.36 | **0.88** |
+| **F1-score (Weighted)** | 0.74 | 0.33 | **0.89** |
 
 ---
 
-## 🧠 Laboratory Work 4 — Reflection & Analysis
+## 🧠 GUIDE QUESTIONS (Reflection & Analysis)
 
 ### **A. Model Evaluation Analysis**
-*   **Weakest Classes**: Based on the confusion matrix, **Silver moss** and **Urban bristle moss** were the most difficult to classify, often being confused with **Grey-cushioned grimmia** due to similar visual textures.
-*   **Low Recall**: A low recall in the model indicates that many actual instances of a species are being missed or incorrectly labeled as a different species.
-*   **AUC vs Accuracy**: The AUC score (**0.778**) is significantly higher than the Accuracy (**35.8%**). This suggests the model has a high potential for distinguishing classes but requires more training epochs to reach peak accuracy with the new augmentation settings.
+1.  **Weakest-performing classes**: In the baseline, **Silver moss** was the weakest. In the final Advanced Model, all classes performed above 70%, with **Fire moss** being the most challenging.
+2.  **Score Variation**: Precision reached **1.00** for several classes (Silver, Red-stemmed feather, Yew-leaved pocket), meaning the model was 100% certain when it identified those species.
+3.  **Low Recall Significance**: Low recall indicates the model is "missing" instances of a species (False Negatives). Our final model fixed this, raising recall from ~30% to **88%**.
+4.  **AUC vs Accuracy**: The AUC score reflected the model's high potential early on. Even when accuracy was low, the high AUC showed the model was learning the right categories.
 
 ### **B. Model Improvement**
-*   **Data Augmentation**: This technique significantly reduced overfitting. By making the training set "harder," we forced the model to learn shapes and patterns rather than memorizing specific pixels.
-*   **Batch Normalization**: This layer stabilized the training process, allowing the loss to converge smoothly despite the high complexity of the 20-class dataset.
-*   **Dropout**: By randomly disabling neurons, Dropout prevented the model from relying on any single feature, leading to a model that generalizes better to unseen validation data.
-*   **Early Stopping**: This prevented the model from wasting resources or overfitting by automatically halting the training once the validation loss stopped improving.
+5.  **Data Augmentation**: Forced the model to learn shapes and textures that are invariant to rotation or lighting, making it robust for real-world field photos.
+6.  **Batch Normalization**: Stabilized the internal gradients of the CNN, allowing us to use a much higher performance architecture (EfficientNet) without it "crashing."
+7.  **Dropout**: Acted as a regularizer, ensuring the model didn't just "memorize" the training set but instead learned generalizable features.
+8.  **Early Stopping**: Prevented overfitting by halting training if the validation loss stopped improving, ensuring the model remained "flexible."
 
-### **C. Explainability (Grad-CAM)**
-*   **Grad-CAM Heatmaps**: Using Grad-CAM, I visualized the model’s decision-making process. The heatmaps showed that the model correctly focuses on the **moss leaf clusters** rather than the background environment.
-*   **Real-World Importance**: Explainability is critical in AI deployment. It allows researchers to verify that the model is making decisions based on botanical features, ensuring the system is reliable for scientific use.
+### **C. Performance Comparison**
+9.  **Improvements**: We achieved a **14% jump** over the baseline accuracy and a total elimination of "blind spots" (0.00 scores) in the classification report.
+10. **Most Contributed**: **Transfer Learning (EfficientNetB0)**. Using a pre-trained "Master Brain" allowed the model to leverage millions of pre-learned visual features.
+11. **Gap Decrease**: The generalization gap narrowed to a healthy **7%**, which is excellent for a 20-class botanical dataset.
 
----
-
-## 🛠️ Technology Stack
-*   **Framework**: TensorFlow / Keras
-*   **Evaluation**: Scikit-Learn (Classification Report, Confusion Matrix, ROC/AUC)
-*   **Explainability**: Grad-CAM (Gradient-weighted Class Activation Mapping)
-*   **Environment**: Google Colab (T4 GPU Accelerated)
+### **D. Explainability (Grad-CAM Integration)**
+12. **Grad-CAM Utility**: It revealed the "Heatmap" of the AI's attention, proving it focuses on moss leaf clusters rather than the background soil.
+13. **Relevant Regions**: Yes. The hotspots were concentrated on the central moss cushions, providing visual evidence of botanical feature extraction.
+14. **Real-World Importance**: Explainability builds trust. It ensures that an AI used for biological research is making decisions based on actual science, not coincidental background pixels.
